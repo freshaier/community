@@ -27,4 +27,7 @@ create table USER
 	constraint USER_PK
 		primary key (ID)
 );
-alter table USER add bio varchar(256) null;
+
+
+
+```
