@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -30,7 +31,8 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
-                           HttpServletResponse response){
+                           HttpServletResponse response,
+                           HttpServletRequest request){
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientID);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -40,7 +42,8 @@ public class AuthorizeController {
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
         System.out.println(githubUser.getName());
-        if(githubUser!=null){
+        //if(githubUser!=null){
+        if(githubUser!=null&&githubUser.getId()!=null){
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
@@ -49,11 +52,13 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
-            response.addCookie(new Cookie("token",token));
+            response.addCookie(new Cookie("tokenya",token));
+            System.out.println("token generates");
             //success
-           // request.getSession().setAttribute("user",githubUser);
+            //request.getSession().setAttribute("user",githubUser);
             //重定向访问已经登录的位置
-            return "redirect:/";
+            //return "redirect:/";
+            return "index";
         }else {
             return "redirect:/";
 

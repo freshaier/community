@@ -6,35 +6,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
+//@RequestMapping("/i")
 public class IndexController {
-    /*@GetMapping("/hello")
-    public String hello(@RequestParam (name = "name") String name, Model model){
-        model.addAttribute("name",name);
-        return "index";
-    }*/
     @Autowired
     private UserMapper userMapper;
     @GetMapping("/index")
     public String index(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
+        System.out.println(cookies.length);
         for (Cookie cookie : cookies) {
-            if(cookie.equals("token")){
+            //System.out.println("enter for");
+            if(cookie.getName().equals("tokenya")){
                 String token = cookie.getValue();
+                System.out.println("tokenya:"+token);
                 User user = userMapper.findByToken(token);
                 if(user!=null){
+                    System.out.println("index user exists");
+                    System.out.println(user.getToken());
                     request.getSession().setAttribute("user",user);
                 }
+                System.out.println("index user exists");
                 break;
             }
 
         }
-
+        System.out.println("index html");
         return "index";
     }
 }
