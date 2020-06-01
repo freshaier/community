@@ -14,6 +14,7 @@
 [Git download](https://git-scm.com/)
 [Visual-paradigm](https://www.visual-paradigm.com/cn/)
 [okhttp](https://square.github.io/okhttp/)
+[Lombok](https://projectlombok.org)
 ## 脚本
 ```sql
 create table USER

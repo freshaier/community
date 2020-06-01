@@ -17,27 +17,22 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
     @Autowired
     private UserMapper userMapper;
-    @GetMapping("/index")
+    @GetMapping("/")
     public String index(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
-        System.out.println(cookies.length);
-        for (Cookie cookie : cookies) {
-            //System.out.println("enter for");
-            if(cookie.getName().equals("tokenya")){
-                String token = cookie.getValue();
-                System.out.println("tokenya:"+token);
-                User user = userMapper.findByToken(token);
-                if(user!=null){
-                    System.out.println("index user exists");
-                    System.out.println(user.getToken());
-                    request.getSession().setAttribute("user",user);
+        //再次登录时根据上一次登陆成功是数据库中保存的tokenya恢复登录状态
+        if(cookies!=null&&cookies.length!=0)
+            for (Cookie cookie : cookies) {
+                if(cookie.getName().equals("tokenya")){
+                    String token = cookie.getValue();
+                    User user = userMapper.findByToken(token);
+                    if(user!=null){
+                        request.getSession().setAttribute("user",user);
+                    }
+                    break;
                 }
-                System.out.println("index user exists");
-                break;
-            }
 
         }
-        System.out.println("index html");
         return "index";
     }
 }

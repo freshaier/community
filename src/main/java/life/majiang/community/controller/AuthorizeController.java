@@ -41,24 +41,22 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        System.out.println(githubUser.getName());
-        //if(githubUser!=null){
         if(githubUser!=null&&githubUser.getId()!=null){
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setAccountID(String.valueOf(githubUser.getId()));
             user.setName(githubUser.getName());
+            System.out.println(githubUser.getBio());
+            user.setBio(githubUser.getBio());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             userMapper.insert(user);
             response.addCookie(new Cookie("tokenya",token));
-            System.out.println("token generates");
             //success
-            //request.getSession().setAttribute("user",githubUser);
             //重定向访问已经登录的位置
-            //return "redirect:/";
-            return "index";
+            return "redirect:/";
         }else {
             return "redirect:/";
 
