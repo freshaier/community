@@ -15,4 +15,6 @@ public interface UserMapper {
     @Select("select * from user where token = #{token}")
     //非类的时候加注解@Param
     User findByToken(@Param("token") String token);
+    @Select("select * from user where id = #{id}")
+    User findById(@Param("id")Integer creator);
 }
